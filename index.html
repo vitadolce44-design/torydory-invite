@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>유진눈아, 우리 집 올래? 💕</title>
+  <title>눈아들, 우리 집 올래? 💕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
@@ -16,10 +16,16 @@
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
         "Noto Sans KR", system-ui, sans-serif;
       background: radial-gradient(circle at top, #184a36 0%, #0b1d16 50%, #050a08 100%);
+
+      /* ✅ 가운데 고정 말고 위에서 시작 + 스크롤 허용 */
       display: flex;
       justify-content: center;
-      align-items: center;
-      overflow: hidden;
+      align-items: flex-start;
+
+      overflow-y: auto;   /* 세로 스크롤 가능 */
+      overflow-x: hidden; /* 가로 스크롤은 숨기기 */
+
+      padding: 20px 0 40px;  /* 위아래 여유 공간 (모바일 하단 잘림 방지) */
       color: #fff;
     }
 
@@ -169,6 +175,15 @@
         opacity: 1;
       }
     }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 20px;
+      }
+      .content {
+        padding: 18px 18px 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -184,8 +199,8 @@
         </div>
 
         <div class="content">
-          <div class="title">유진눈아, 우리 집 올래? 💕</div>
-          <div class="subtitle">토리도리가 유지니를 기다리고 있어요. 🎅🐱</div>
+          <div class="title">눈아들, 우리 집 올래? 💕</div>
+          <div class="subtitle">토리도리가 눈아들을 기다리고 있어요. 🎅🐱</div>
 
           <div class="info">
             <div class="info-row">
@@ -194,7 +209,7 @@
             </div>
             <div class="info-row" style="margin-top:4px;">
               <div class="info-label">장소</div>
-              <div class="info-value">토리도리집(서울시 영등포구 신길동 4973 102동 502호) </div>
+              <div class="info-value">토리도리집</div>
             </div>
           </div>
 
@@ -268,5 +283,3 @@
   </script>
 </body>
 </html>
-
-

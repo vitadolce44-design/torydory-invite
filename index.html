@@ -5,7 +5,11 @@
   <title>눈아들, 우리 집 올래? 💕</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       min-height: 100vh;
@@ -19,92 +23,162 @@
       color: #fff;
     }
 
+    /* 눈 내리는 레이어 */
     #snow-canvas {
-      position: fixed; inset: 0; pointer-events: none; z-index: 1;
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
     }
 
     .invite-wrapper {
-      position: relative; z-index: 2;
-      padding: 20px; width: 100%; max-width: 420px;
-      animation: fadeInUp 0.8s ease-out forwards; opacity: 0;
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      width: 100%;
+      max-width: 420px;
+
+      /* 카드 3D 열림 효과용 */
+      perspective: 1200px;
+
+      /* wrapper는 항상 보이게 */
+      opacity: 1;
     }
 
     .card {
-      background: rgba(255,255,255,0.95);
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 20px;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.4);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
       overflow: hidden;
+
+      /* 카드 열리는 애니메이션 */
+      transform-origin: top center;
+      transform: rotateX(-90deg);
+      animation: openCard 0.8s ease-out forwards;
+    }
+
+    .image-area {
+      position: relative;
+      background: #184a36;
     }
 
     .image-area img {
-      width: 100%; height: auto; display: block; object-fit: cover;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .badge {
-      position: absolute; top: 14px; right: 14px;
-      background: rgba(255,255,255,0.9);
-      color: #c62828; font-size: 12px;
-      padding: 4px 10px; border-radius: 999px;
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #c62828;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
       font-weight: 600;
+      letter-spacing: 0.02em;
     }
 
     .content {
-      padding: 20px 22px 22px; text-align: center; color: #222;
+      padding: 20px 22px 22px;
+      text-align: center;
+      color: #222;
     }
 
     .title {
-      font-size: 22px; font-weight: 800; color: #c62828;
-      margin-bottom: 12px; line-height: 1.4;
+      font-size: 22px;
+      font-weight: 800;
+      color: #c62828;
+      margin-bottom: 12px;
+      line-height: 1.4;
+      word-break: keep-all;
     }
 
-    .subtitle { font-size: 14px; color: #555; margin-bottom: 10px; }
+    .subtitle {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
 
     .info {
-      margin-top: 10px; padding: 12px 14px;
-      border-radius: 12px; background: #f8f4ef;
-      font-size: 14px; line-height: 1.7; text-align: left;
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f8f4ef;
+      font-size: 14px;
+      line-height: 1.7;
+      text-align: left;
     }
 
-    .info-row { display: flex; gap: 6px; }
-    .info-label { font-weight: 700; min-width: 48px; color: #914418; }
-    .info-value { flex: 1; }
+    .info-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .info-label {
+      font-weight: 700;
+      min-width: 48px;
+      color: #914418;
+    }
+
+    .info-value {
+      flex: 1;
+    }
 
     .footer-text {
-      margin-top: 12px; font-size: 13px; color: #777;
-      text-align: center; line-height: 1.7;
+      margin-top: 12px;
+      font-size: 13px;
+      color: #777;
+      text-align: center;
+      line-height: 1.7;
     }
 
+    /* 🔥 흔들리는 빨간 글씨 */
     .shake {
-      display: inline-block; color: #c62828;
-      font-weight: 800; animation: shakeAnim 0.35s infinite;
+      display: inline-block;
+      color: #c62828;
+      font-weight: 800;
+      animation: shakeAnim 0.35s infinite;
     }
 
     @keyframes shakeAnim {
-      0% { transform: translate(0,0) rotate(0deg); }
-      20% { transform: translate(-1px,1px) rotate(-2deg); }
-      40% { transform: translate(1px,-1px) rotate(2deg); }
-      60% { transform: translate(-1px,0) rotate(-1deg); }
-      80% { transform: translate(1px,1px) rotate(1deg); }
-      100% { transform: translate(0,0) rotate(0deg); }
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      20%  { transform: translate(-1px, 1px) rotate(-2deg); }
+      40%  { transform: translate(1px, -1px) rotate(2deg); }
+      60%  { transform: translate(-1px, 0px) rotate(-1deg); }
+      80%  { transform: translate(1px, 1px) rotate(1deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
     }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(26px) scale(0.97); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
+    /* 🃏 카드가 위에서 탁 열리는 애니메이션 */
+    @keyframes openCard {
+      0% {
+        transform: rotateX(-90deg);
+        opacity: 0;
+      }
+      60% {
+        transform: rotateX(10deg);
+        opacity: 1;
+      }
+      100% {
+        transform: rotateX(0deg);
+        opacity: 1;
+      }
     }
   </style>
 </head>
-
 <body>
   <canvas id="snow-canvas"></canvas>
 
   <div class="invite-wrapper">
     <div class="card">
-
       <div class="image-area">
-        <!-- 이미지 파일 이름이 '토리도리.png'면 아래 이름을 똑같이 맞춰줘 -->
-        <img src="토리도리.png" alt="토리도리 크리스마스" />
-        <div class="badge">Tori & Dori Christmas Party 🎄</div>
+        <!-- 이미지 파일 이름 맞춰주기 (예: 토리도리.png) -->
+        <img src="토리도리.png" alt="토리도리 크리스마스 초대장" />
+        <div class="badge">Tori &amp; Dori Christmas Party 🎄</div>
       </div>
 
       <div class="content">
@@ -129,11 +203,11 @@
           크아아앙… 😼
         </div>
       </div>
-
     </div>
   </div>
 
   <script>
+    // 심플 눈 효과
     const canvas = document.getElementById("snow-canvas");
     const ctx = canvas.getContext("2d");
     let w, h, flakes;
@@ -143,35 +217,44 @@
       h = canvas.height = window.innerHeight;
       flakes = [];
 
-      const count = Math.floor((w*h)/9000);
-      for (let i=0;i<count;i++){
+      const count = Math.floor((w * h) / 9000);
+      for (let i = 0; i < count; i++) {
         flakes.push({
-          x:Math.random()*w, y:Math.random()*h,
-          r:Math.random()*2.2+0.8, d:Math.random()*1+0.5
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 2.2 + 0.8,
+          d: Math.random() * 1 + 0.5
         });
       }
     }
 
-    function drawSnow(){
-      ctx.clearRect(0,0,w,h);
-      ctx.fillStyle="rgba(255,255,255,0.9)";
+    function drawSnow() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
       ctx.beginPath();
-      for(let f of flakes){
-        ctx.moveTo(f.x,f.y);
-        ctx.arc(f.x,f.y,f.r,0,Math.PI*2,true);
+      for (let i = 0; i < flakes.length; i++) {
+        const f = flakes[i];
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
       }
       ctx.fill();
       updateSnow();
       requestAnimationFrame(drawSnow);
     }
 
-    function updateSnow(){
-      for(let f of flakes){
-        f.y += Math.pow(f.d,2)+0.6;
-        f.x += Math.sin(f.y*0.01)*0.3;
-        if(f.y > h){
-          f.y = -10;
-          f.x = Math.random()*w;
+    function updateSnow() {
+      for (let i = 0; i < flakes.length; i++) {
+        const f = flakes[i];
+        f.y += Math.pow(f.d, 2) + 0.6;
+        f.x += Math.sin(f.y * 0.01) * 0.3;
+
+        if (f.y > h) {
+          flakes[i] = {
+            x: Math.random() * w,
+            y: -10,
+            r: f.r,
+            d: f.d
+          };
         }
       }
     }

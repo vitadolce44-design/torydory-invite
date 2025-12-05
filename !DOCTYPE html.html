@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>눈아들, 우리 집 올래? 💕</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+        "Noto Sans KR", system-ui, sans-serif;
+      background: radial-gradient(circle at top, #184a36 0%, #0b1d16 50%, #050a08 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    /* 눈 내리는 레이어 */
+    #snow-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .invite-wrapper {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      width: 100%;
+      max-width: 420px;
+      animation: fadeInUp 0.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+    }
+
+    .image-area {
+      position: relative;
+      background: #184a36;
+    }
+
+    .image-area img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #c62828;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .content {
+      padding: 20px 22px 22px;
+      text-align: center;
+      color: #222;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #c62828;
+      margin-bottom: 12px;
+      line-height: 1.4;
+      word-break: keep-all;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .info {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f8f4ef;
+      font-size: 14px;
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .info-label {
+      font-weight: 700;
+      min-width: 48px;
+      color: #914418;
+    }
+
+    .info-value {
+      flex: 1;
+    }
+
+    .footer-text {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #777;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    /* 🔥 흔들리는 빨간 글씨 */
+    .shake {
+      display: inline-block;
+      color: #c62828;
+      font-weight: 800;
+      animation: shakeAnim 0.35s infinite;
+    }
+
+    @keyframes shakeAnim {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      20%  { transform: translate(-1px, 1px) rotate(-2deg); }
+      40%  { transform: translate(1px, -1px) rotate(2deg); }
+      60%  { transform: translate(-1px, 0px) rotate(-1deg); }
+      80%  { transform: translate(1px, 1px) rotate(1deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(26px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="snow-canvas"></canvas>
+
+  <div class="invite-wrapper">
+    <div class="card">
+      <div class="image-area">
+        <img src="토리도리.png" alt="토리도리 크리스마스 초대장" />
+        <div class="badge">Tori &amp; Dori Christmas Party 🎄</div>
+      </div>
+
+      <div class="content">
+        <div class="title">눈아들, 우리 집 올래? 💕</div>
+        <div class="subtitle">토리도리가 눈아들을 기다리고 있어요. 🎅🐱</div>
+
+        <div class="info">
+          <div class="info-row">
+            <div class="info-label">날짜</div>
+            <div class="info-value">12월 20일 토요일</div>
+          </div>
+          <div class="info-row" style="margin-top:4px;">
+            <div class="info-label">장소</div>
+            <div class="info-value">토리도리집</div>
+          </div>
+        </div>
+
+        <div class="footer-text">
+          안 오면
+          <span style="color:#000; font-weight:600;">토리도리가 </span>
+          <span class="shake">잡아먹는다</span><br />
+          크아아앙… 😼
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 심플 눈 효과
+    const canvas = document.getElementById("snow-canvas");
+    const ctx = canvas.getContext("2d");
+    let w, h, flakes;
+
+    function initSnow() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      flakes = [];
+
+      const count = Math.floor((w * h) / 9000);
+      for (let i = 0; i < count; i++) {
+        flakes.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 2.2 + 0.8,
+          d: Math.random() * 1 + 0.5
+        });
+      }
+    }
+
+    function drawSnow() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+      ctx.beginPath();
+      for (let i = 0; i < flakes.length; i++) {
+        const f = flakes[i];
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+      }
+      ctx.fill();
+      updateSnow();
+      requestAnimationFrame(drawSnow);
+    }
+
+    function updateSnow() {
+      for (let i = 0; i < flakes.length; i++) {
+        const f = flakes[i];
+        f.y += Math.pow(f.d, 2) + 0.6;
+        f.x += Math.sin(f.y * 0.01) * 0.3;
+
+        if (f.y > h) {
+          flakes[i] = {
+            x: Math.random() * w,
+            y: -10,
+            r: f.r,
+            d: f.d
+          };
+        }
+      }
+    }
+
+    window.addEventListener("resize", initSnow);
+    initSnow();
+    drawSnow();
+  </script>
+</body>
+</html>

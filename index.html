@@ -37,24 +37,25 @@
       padding: 20px;
       width: 100%;
       max-width: 420px;
-
-      /* 카드 3D 열림 효과용 */
-      perspective: 1200px;
-
-      /* wrapper는 항상 보이게 */
-      opacity: 1;
+      perspective: 1200px; /* 살짝 입체감 주기 */
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.95);
       border-radius: 20px;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
       overflow: hidden;
+      background: transparent; /* 실제 배경은 안쪽에서 처리 */
+    }
 
-      /* 카드 열리는 애니메이션 */
+    /* 실제 카드 내용 (이게 반으로 접혔다가 펴짐) */
+    .card-inner {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      overflow: hidden;
+
       transform-origin: top center;
-      transform: rotateX(-90deg);
-      animation: openCard 0.8s ease-out forwards;
+      transform: scaleY(0);
+      animation: foldOpen 0.8s ease-out forwards;
     }
 
     .image-area {
@@ -153,18 +154,18 @@
       100% { transform: translate(0, 0) rotate(0deg); }
     }
 
-    /* 🃏 카드가 위에서 탁 열리는 애니메이션 */
-    @keyframes openCard {
+    /* 🃏 반으로 접혔다가 쫙 펴지는 애니메이션 */
+    @keyframes foldOpen {
       0% {
-        transform: rotateX(-90deg);
+        transform: scaleY(0);
         opacity: 0;
       }
       60% {
-        transform: rotateX(10deg);
+        transform: scaleY(1.02);
         opacity: 1;
       }
       100% {
-        transform: rotateX(0deg);
+        transform: scaleY(1);
         opacity: 1;
       }
     }
@@ -175,32 +176,34 @@
 
   <div class="invite-wrapper">
     <div class="card">
-      <div class="image-area">
-        <!-- 이미지 파일 이름 맞춰주기 (예: 토리도리.png) -->
-        <img src="토리도리.png" alt="토리도리 크리스마스 초대장" />
-        <div class="badge">Tori &amp; Dori Christmas Party 🎄</div>
-      </div>
-
-      <div class="content">
-        <div class="title">눈아들, 우리 집 올래? 💕</div>
-        <div class="subtitle">토리도리가 눈아들을 기다리고 있어요. 🎅🐱</div>
-
-        <div class="info">
-          <div class="info-row">
-            <div class="info-label">날짜</div>
-            <div class="info-value">12월 20일 토요일</div>
-          </div>
-          <div class="info-row" style="margin-top:4px;">
-            <div class="info-label">장소</div>
-            <div class="info-value">토리도리집</div>
-          </div>
+      <div class="card-inner">
+        <div class="image-area">
+          <!-- 이미지 파일 이름 맞춰주기 (예: 토리도리.png) -->
+          <img src="토리도리.png" alt="토리도리 크리스마스 초대장" />
+          <div class="badge">Tori &amp; Dori Christmas Party 🎄</div>
         </div>
 
-        <div class="footer-text">
-          안 오면
-          <span style="color:#000; font-weight:600;">토리도리가 </span>
-          <span class="shake">잡아먹는다</span><br />
-          크아아앙… 😼
+        <div class="content">
+          <div class="title">눈아들, 우리 집 올래? 💕</div>
+          <div class="subtitle">토리도리가 눈아들을 기다리고 있어요. 🎅🐱</div>
+
+          <div class="info">
+            <div class="info-row">
+              <div class="info-label">날짜</div>
+              <div class="info-value">12월 20일 토요일</div>
+            </div>
+            <div class="info-row" style="margin-top:4px;">
+              <div class="info-label">장소</div>
+              <div class="info-value">토리도리집</div>
+            </div>
+          </div>
+
+          <div class="footer-text">
+            안 오면
+            <span style="color:#000; font-weight:600;">토리도리가 </span>
+            <span class="shake">잡아먹는다</span><br />
+            크아아앙… 😼
+          </div>
         </div>
       </div>
     </div>

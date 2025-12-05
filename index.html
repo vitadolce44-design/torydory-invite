@@ -37,25 +37,25 @@
       padding: 20px;
       width: 100%;
       max-width: 420px;
-      perspective: 1200px; /* 살짝 입체감 주기 */
+      perspective: 1200px; /* 살짝 입체감 */
     }
 
     .card {
       border-radius: 20px;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
       overflow: hidden;
-      background: transparent; /* 실제 배경은 안쪽에서 처리 */
+      background: transparent;
     }
 
-    /* 실제 카드 내용 (이게 반으로 접혔다가 펴짐) */
+    /* ✅ 가운데에서 위·아래로 동시에 펴지는 부분 */
     .card-inner {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 20px;
       overflow: hidden;
 
-      transform-origin: top center;
-      transform: scaleY(0);
-      animation: foldOpen 0.8s ease-out forwards;
+      transform-origin: center center;   /* 중앙 기준으로 펼쳐짐 */
+      transform: scaleY(0);              /* 처음엔 납작 */
+      animation: centerFold 0.8s ease-out forwards;
     }
 
     .image-area {
@@ -154,14 +154,14 @@
       100% { transform: translate(0, 0) rotate(0deg); }
     }
 
-    /* 🃏 반으로 접혔다가 쫙 펴지는 애니메이션 */
-    @keyframes foldOpen {
+    /* 🃏 가운데에서 위·아래로 펴지는 애니메이션 */
+    @keyframes centerFold {
       0% {
         transform: scaleY(0);
         opacity: 0;
       }
       60% {
-        transform: scaleY(1.02);
+        transform: scaleY(1.05);
         opacity: 1;
       }
       100% {
